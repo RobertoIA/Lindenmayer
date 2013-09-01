@@ -21,7 +21,6 @@ import javax.swing.JSeparator;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
@@ -45,20 +44,15 @@ public class Frame extends JFrame implements ActionListener {
 			"Dragon Curve", "Fractal Plant" };
 
 	public Frame() {
-		SwingUtilities.invokeLater(new Runnable() {
+		setTitle("");
 
-			public void run() {
-				setTitle("");
+		initUI();
 
-				initUI();
-
-				pack();
-				setLocationRelativeTo(null);
-				setResizable(false);
-				setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				setVisible(true);
-			}
-		});
+		pack();
+		setLocationRelativeTo(null);
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setVisible(true);
 	}
 
 	public final void initUI() {
@@ -98,7 +92,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		examplesBox.addActionListener(this);
 		examplesBox.setSelectedIndex(0);
-		
+
 		originButtonGroup.add(cornerButton);
 		originButtonGroup.add(centerButton);
 
@@ -185,18 +179,18 @@ public class Frame extends JFrame implements ActionListener {
 
 		constraints.gridy = 16;
 		menuPanel.add(new JSeparator(), constraints);
-		
+
 		constraints.gridy = 17;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
 		menuPanel.add(originLabel, constraints);
-		
+
 		constraints.gridy = 18;
 		menuPanel.add(cornerButton, constraints);
-		
+
 		constraints.gridx = 1;
 		menuPanel.add(centerButton, constraints);
-		
+
 		constraints.gridy = 19;
 		constraints.gridx = 0;
 		constraints.gridwidth = 2;
@@ -218,6 +212,7 @@ public class Frame extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent event) {
 		if (event.getActionCommand() == "comboBoxChanged") {
+			@SuppressWarnings("unchecked")
 			JComboBox<String> examplesBox = (JComboBox<String>) event
 					.getSource();
 			String example = (String) examplesBox.getSelectedItem();

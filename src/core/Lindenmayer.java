@@ -1,9 +1,7 @@
 package core;
 
-import gui.Canvas;
 import gui.Frame;
 
-import java.awt.geom.Line2D;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,9 +9,11 @@ import java.util.Map;
 public class Lindenmayer {
 
 	static Frame frame;
+	static Turtle turtle;
 
 	public static void main(String[] args) {
 		frame = new Frame();
+		turtle = new Turtle(frame.getCanvas());
 	}
 
 	public static void calculateLSystem(String start, String[] rules,
@@ -24,8 +24,9 @@ public class Lindenmayer {
 		for (int i = 0; i < iterations; i++) {
 			state = applyRules(parsedRules, state);
 		}
-		
-		drawState(state, angle, lineLength, centered);
+
+		turtle.setProperties(state, angle, lineLength, centered);
+		turtle.draw(3);
 	}
 
 	private static Map<Character, char[]> parseRules(String[] rules) {
@@ -57,49 +58,5 @@ public class Lindenmayer {
 		}
 
 		return newState;
-	}
-
-	private static void drawState(String state, int angle, int lineLength,
-			boolean centered) {
-		Canvas canvas = frame.getCanvas();
-		int currAngle = 90;
-		double currX;
-		double currY;
-		
-		if(centered) {
-			currX = (canvas.getSize().width -
-					canvas.getInsets().left - canvas.getInsets().right) / 2;
-			currY = (canvas.getSize().height -
-					canvas.getInsets().bottom - canvas.getInsets().top) / 2;
-		} else {
-			currX = 10;
-			currY = canvas.getSize().height -
-					canvas.getInsets().bottom - canvas.getInsets().top - 10;
-		}
-		
-		canvas.clear();
-
-		for (char item : state.toCharArray()) {
-			if (item == 'F' || item == 'G') {
-				double nextX = currX +
-						(lineLength * Math.sin(currAngle * Math.PI / 180));
-				double nextY = currY +
-						(lineLength * Math.cos(currAngle * Math.PI / 180));
-				canvas.addLine(new Line2D.Double(
-						currX, currY, nextX, nextY));
-				currX = nextX;
-				currY = nextY;
-			} else if (item == '+') {
-				currAngle += angle;
-			} else if (item == '-') {
-				currAngle -= angle;
-			} else if (item == '[') {
-
-			} else if (item == ']') {
-
-			}
-		}
-		
-		canvas.draw();
 	}
 }
