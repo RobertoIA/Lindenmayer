@@ -17,8 +17,7 @@ public class Lindenmayer {
 	}
 
 	public static void calculateLSystem(String start, String[] rules,
-			int iterations, int angle, int lineLength) {
-
+			int iterations, int angle, int lineLength, boolean centered) {
 		String state = start;
 		Map<Character, char[]> parsedRules = parseRules(rules);
 
@@ -26,7 +25,7 @@ public class Lindenmayer {
 			state = applyRules(parsedRules, state);
 		}
 		
-		drawState(state, angle, lineLength);
+		drawState(state, angle, lineLength, centered);
 	}
 
 	private static Map<Character, char[]> parseRules(String[] rules) {
@@ -60,12 +59,23 @@ public class Lindenmayer {
 		return newState;
 	}
 
-	private static void drawState(String state, int angle, int lineLength) {
+	private static void drawState(String state, int angle, int lineLength,
+			boolean centered) {
 		Canvas canvas = frame.getCanvas();
 		int currAngle = 90;
-		double currX = 10;
-		double currY = canvas.getSize().height -
-				canvas.getInsets().bottom - canvas.getInsets().top - 10;
+		double currX;
+		double currY;
+		
+		if(centered) {
+			currX = (canvas.getSize().width -
+					canvas.getInsets().left - canvas.getInsets().right) / 2;
+			currY = (canvas.getSize().height -
+					canvas.getInsets().bottom - canvas.getInsets().top) / 2;
+		} else {
+			currX = 10;
+			currY = canvas.getSize().height -
+					canvas.getInsets().bottom - canvas.getInsets().top - 10;
+		}
 		
 		canvas.clear();
 

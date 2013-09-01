@@ -8,12 +8,14 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextArea;
@@ -35,6 +37,9 @@ public class Frame extends JFrame implements ActionListener {
 	private JTextField iterationsTextField;
 	private JTextField angleTextField;
 	private JTextField lineTextField;
+	private ButtonGroup originButtonGroup;
+	private JRadioButton cornerButton;
+	private JRadioButton centerButton;
 
 	private String[] examples = { "Koch Curve", "Sierpinski Triangle",
 			"Dragon Curve", "Fractal Plant" };
@@ -65,7 +70,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		canvasPanel = new Canvas();
 		canvasPanel.setBackground(Color.white);
-		canvasPanel.setPreferredSize(new Dimension(400, 400));
+		canvasPanel.setPreferredSize(new Dimension(500, 500));
 		canvasPanel.setBorder(new LineBorder(Color.black));
 
 		GridBagConstraints constraints = new GridBagConstraints();
@@ -77,6 +82,7 @@ public class Frame extends JFrame implements ActionListener {
 		JLabel iterationsLabel = new JLabel("Iterations");
 		JLabel angleLabel = new JLabel("Angle");
 		JLabel lineLabel = new JLabel("Line length");
+		JLabel originLabel = new JLabel("Origin");
 
 		examplesBox = new JComboBox<String>(examples);
 		startTextField = new JTextField();
@@ -85,10 +91,16 @@ public class Frame extends JFrame implements ActionListener {
 		iterationsTextField = new JTextField();
 		angleTextField = new JTextField();
 		lineTextField = new JTextField();
+		cornerButton = new JRadioButton("corner");
+		centerButton = new JRadioButton("center");
+		originButtonGroup = new ButtonGroup();
 		JButton drawButton = new JButton("Draw");
 
 		examplesBox.addActionListener(this);
 		examplesBox.setSelectedIndex(0);
+		
+		originButtonGroup.add(cornerButton);
+		originButtonGroup.add(centerButton);
 
 		constraints.gridx = 0;
 		constraints.insets = new Insets(2, 2, 2, 2);
@@ -173,8 +185,25 @@ public class Frame extends JFrame implements ActionListener {
 
 		constraints.gridy = 16;
 		menuPanel.add(new JSeparator(), constraints);
-
+		
 		constraints.gridy = 17;
+		constraints.gridwidth = 1;
+		constraints.fill = GridBagConstraints.NONE;
+		menuPanel.add(originLabel, constraints);
+		
+		constraints.gridy = 18;
+		menuPanel.add(cornerButton, constraints);
+		
+		constraints.gridx = 1;
+		menuPanel.add(centerButton, constraints);
+		
+		constraints.gridy = 19;
+		constraints.gridx = 0;
+		constraints.gridwidth = 2;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		menuPanel.add(new JSeparator(), constraints);
+
+		constraints.gridy = 20;
 		drawButton.addActionListener(this);
 		menuPanel.add(drawButton, constraints);
 
@@ -198,9 +227,10 @@ public class Frame extends JFrame implements ActionListener {
 			case "Koch Curve":
 				startTextField.setText("F");
 				rulesTextArea.setText("F:F+F-F-F+F");
-				iterationsTextField.setText("5");
+				iterationsTextField.setText("6");
 				angleTextField.setText("90");
-				lineTextField.setText("3");
+				lineTextField.setText("2");
+				cornerButton.setSelected(true);
 				break;
 			case "Sierpinski Triangle":
 				startTextField.setText("F");
@@ -208,13 +238,15 @@ public class Frame extends JFrame implements ActionListener {
 				iterationsTextField.setText("8");
 				angleTextField.setText("60");
 				lineTextField.setText("2");
+				cornerButton.setSelected(true);
 				break;
 			case "Dragon Curve":
 				startTextField.setText("FX");
 				rulesTextArea.setText("X:X+YF\nY:FX-Y");
-				iterationsTextField.setText("12");
+				iterationsTextField.setText("13");
 				angleTextField.setText("90");
 				lineTextField.setText("3");
+				centerButton.setSelected(true);
 				break;
 			case "Fractal Plant":
 				startTextField.setText("X");
@@ -222,6 +254,7 @@ public class Frame extends JFrame implements ActionListener {
 				iterationsTextField.setText("");
 				angleTextField.setText("25");
 				lineTextField.setText("");
+				cornerButton.setSelected(true);
 				break;
 			}
 
@@ -235,7 +268,7 @@ public class Frame extends JFrame implements ActionListener {
 				int lineLength = Integer.parseInt(lineTextField.getText());
 
 				Lindenmayer.calculateLSystem(start, rules, iterations, angle,
-						lineLength);
+						lineLength, centerButton.isSelected());
 			} catch (NumberFormatException exception) {
 				JOptionPane.showMessageDialog(canvasPanel,
 						"Please review input parameters.", "Error",
