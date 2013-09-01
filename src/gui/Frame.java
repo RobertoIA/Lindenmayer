@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,23 +27,47 @@ import javax.swing.border.LineBorder;
 
 import core.Lindenmayer;
 
+/**
+ * Implements the application's GUI.
+ * 
+ * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
+ * 
+ */
 @SuppressWarnings("serial")
 public class Frame extends JFrame implements ActionListener {
 
+	/** Canvas to draw on. */
 	private Canvas canvasPanel;
+	/** Combo box that contains the examples. */
 	private JComboBox<String> examplesBox;
+	/** Text field for axioms / starting conditions. */
 	private JTextField startTextField;
+	/** Text area for rules. */
 	private JTextArea rulesTextArea;
+	/** Text field for iterations. */
 	private JTextField iterationsTextField;
+	/** Text field for turning angle. */
 	private JTextField angleTextField;
+	/** Text field for line length. */
 	private JTextField lineTextField;
+	/** Button group for origin radio buttons. */
 	private ButtonGroup originButtonGroup;
+	/** Corner start radio button. */
 	private JRadioButton cornerButton;
+	/** Center start radio button. */
 	private JRadioButton centerButton;
+	/** Bottom start radio button. */
+	private JRadioButton bottomButton;
+	/** Check box for vertical or default start. */
+	private JCheckBox verticalCheckBox;
 
-	private String[] examples = { "Koch Curve", "Sierpinski Triangle",
-			"Dragon Curve", "Fractal Plant" };
+	/** Examples list. */
+	private String[] examples = { "Simple Tree", "Koch Curve",
+			"Sierpinski Triangle", "Dragon Curve", "Fractal Plant" };
 
+	/**
+	 * Constructor.
+	 */
 	public Frame() {
 		setTitle("");
 
@@ -55,6 +80,9 @@ public class Frame extends JFrame implements ActionListener {
 		setVisible(true);
 	}
 
+	/**
+	 * Creates the UI and all the elements inside.
+	 */
 	public final void initUI() {
 		JPanel mainPanel = new JPanel(new GridBagLayout());
 		getContentPane().add(mainPanel);
@@ -64,12 +92,12 @@ public class Frame extends JFrame implements ActionListener {
 
 		canvasPanel = new Canvas();
 		canvasPanel.setBackground(Color.white);
-		canvasPanel.setPreferredSize(new Dimension(500, 500));
+		canvasPanel.setPreferredSize(new Dimension(550, 550));
 		canvasPanel.setBorder(new LineBorder(Color.black));
 
 		GridBagConstraints constraints = new GridBagConstraints();
 
-		JLabel titleLabel = new JLabel("Lindenmeyer");
+		JLabel titleLabel = new JLabel("Lindenmayer");
 		JLabel examplesLabel = new JLabel("Examples");
 		JLabel startLabel = new JLabel("Start");
 		JLabel rulesLabel = new JLabel("Rules");
@@ -87,7 +115,9 @@ public class Frame extends JFrame implements ActionListener {
 		lineTextField = new JTextField();
 		cornerButton = new JRadioButton("corner");
 		centerButton = new JRadioButton("center");
+		bottomButton = new JRadioButton("bottom");
 		originButtonGroup = new ButtonGroup();
+		verticalCheckBox = new JCheckBox("Vertical");
 		JButton drawButton = new JButton("Draw");
 
 		examplesBox.addActionListener(this);
@@ -95,6 +125,7 @@ public class Frame extends JFrame implements ActionListener {
 
 		originButtonGroup.add(cornerButton);
 		originButtonGroup.add(centerButton);
+		originButtonGroup.add(bottomButton);
 
 		constraints.gridx = 0;
 		constraints.insets = new Insets(2, 2, 2, 2);
@@ -193,11 +224,20 @@ public class Frame extends JFrame implements ActionListener {
 
 		constraints.gridy = 19;
 		constraints.gridx = 0;
+		menuPanel.add(bottomButton, constraints);
+
+		constraints.gridy = 20;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		menuPanel.add(new JSeparator(), constraints);
 
-		constraints.gridy = 20;
+		constraints.gridy = 21;
+		menuPanel.add(verticalCheckBox, constraints);
+
+		constraints.gridy = 22;
+		menuPanel.add(new JSeparator(), constraints);
+
+		constraints.gridy = 23;
 		drawButton.addActionListener(this);
 		menuPanel.add(drawButton, constraints);
 
@@ -205,12 +245,17 @@ public class Frame extends JFrame implements ActionListener {
 		mainPanel.add(canvasPanel);
 	}
 
-	public Canvas getCanvas() {
+	/**
+	 * Returns the canvas object.
+	 * 
+	 * @return The canvas.
+	 */
+	public final Canvas getCanvas() {
 		return canvasPanel;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent event) {
+	public final void actionPerformed(final ActionEvent event) {
 		if (event.getActionCommand() == "comboBoxChanged") {
 			@SuppressWarnings("unchecked")
 			JComboBox<String> examplesBox = (JComboBox<String>) event
@@ -219,6 +264,15 @@ public class Frame extends JFrame implements ActionListener {
 
 			// Switch case with Strings. Thanks JDK 7!.
 			switch (example) {
+			case "Simple Tree":
+				startTextField.setText("G");
+				rulesTextArea.setText("F:FF\nG:F[+G]-G");
+				iterationsTextField.setText("8");
+				angleTextField.setText("45");
+				lineTextField.setText("2");
+				bottomButton.setSelected(true);
+				verticalCheckBox.setSelected(true);
+				break;
 			case "Koch Curve":
 				startTextField.setText("F");
 				rulesTextArea.setText("F:F+F-F-F+F");
@@ -226,6 +280,7 @@ public class Frame extends JFrame implements ActionListener {
 				angleTextField.setText("90");
 				lineTextField.setText("2");
 				cornerButton.setSelected(true);
+				verticalCheckBox.setSelected(false);
 				break;
 			case "Sierpinski Triangle":
 				startTextField.setText("F");
@@ -234,6 +289,7 @@ public class Frame extends JFrame implements ActionListener {
 				angleTextField.setText("60");
 				lineTextField.setText("2");
 				cornerButton.setSelected(true);
+				verticalCheckBox.setSelected(false);
 				break;
 			case "Dragon Curve":
 				startTextField.setText("FX");
@@ -242,28 +298,39 @@ public class Frame extends JFrame implements ActionListener {
 				angleTextField.setText("90");
 				lineTextField.setText("3");
 				centerButton.setSelected(true);
+				verticalCheckBox.setSelected(false);
+				verticalCheckBox.setSelected(true);
 				break;
 			case "Fractal Plant":
 				startTextField.setText("X");
 				rulesTextArea.setText("X:F-[[X]+X]+F[+FX]-X\nF:FF");
-				iterationsTextField.setText("");
+				iterationsTextField.setText("6");
 				angleTextField.setText("25");
-				lineTextField.setText("");
-				cornerButton.setSelected(true);
+				lineTextField.setText("3");
+				bottomButton.setSelected(true);
+				verticalCheckBox.setSelected(true);
+				break;
+			default:
 				break;
 			}
 
 		} else {
 			try {
 				String start = startTextField.getText().replaceAll("\\s", "");
-				String rules[] = rulesTextArea.getText().split("\\n");
+				String[] rules = rulesTextArea.getText().split("\\n");
 				int iterations = Integer
 						.parseInt(iterationsTextField.getText());
 				int angle = Integer.parseInt(angleTextField.getText());
 				int lineLength = Integer.parseInt(lineTextField.getText());
 
+				int startPosition = 1;
+				if (!centerButton.isSelected())
+					startPosition = cornerButton.isSelected() ? 2 : 3;
+
 				Lindenmayer.calculateLSystem(start, rules, iterations, angle,
-						lineLength, centerButton.isSelected());
+						lineLength, startPosition,
+						verticalCheckBox.isSelected());
+
 			} catch (NumberFormatException exception) {
 				JOptionPane.showMessageDialog(canvasPanel,
 						"Please review input parameters.", "Error",

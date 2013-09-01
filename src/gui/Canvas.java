@@ -9,16 +9,32 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
+/**
+ * Implements a canvas to draw lines on.
+ * 
+ * @author <a href="mailto:RobertoIA1987@gmail.com">Roberto Izquierdo Amo</a>
+ * 
+ */
 @SuppressWarnings("serial")
 public class Canvas extends JPanel {
 
+	/** List of lines to draw onto the canvas. */
 	private List<Line2D> lines;
 
-	public void addLine(Line2D line) {
+	/**
+	 * Adds a line to the canvas.
+	 * 
+	 * @param line
+	 *            Line to add to the canvas.
+	 */
+	public final void addLine(final Line2D line) {
 		lines.add(line);
 	}
 
-	public void draw() {
+	/**
+	 * Draws current content of the canvas.
+	 */
+	public final void draw() {
 		Graphics2D graphics2D = (Graphics2D) getGraphics();
 
 		graphics2D.setColor(Color.blue);
@@ -27,7 +43,10 @@ public class Canvas extends JPanel {
 					(int) line.getX2(), (int) line.getY2());
 	}
 
-	public void clear() {
+	/**
+	 * Clears the canvas and redraws background and border.
+	 */
+	public final void clear() {
 		Graphics2D graphics2D = (Graphics2D) getGraphics();
 		lines.clear();
 
@@ -37,7 +56,7 @@ public class Canvas extends JPanel {
 	}
 
 	@Override
-	public void paintComponent(Graphics graphics) {
+	public final void paintComponent(final Graphics graphics) {
 		super.paintComponent(graphics);
 
 		lines = new ArrayList<Line2D>();
