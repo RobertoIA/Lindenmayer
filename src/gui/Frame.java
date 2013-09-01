@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,11 +29,15 @@ import core.Lindenmayer;
 public class Frame extends JFrame implements ActionListener {
 
 	private Canvas canvasPanel;
+	private JComboBox<String> examplesBox;
 	private JTextField startTextField;
 	private JTextArea rulesTextArea;
 	private JTextField iterationsTextField;
 	private JTextField angleTextField;
 	private JTextField lineTextField;
+
+	private String[] examples = { "Koch Curve", "Sierpinski Triangle",
+			"Dragon Curve", "Fractal Plant" };
 
 	public Frame() {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -66,20 +71,24 @@ public class Frame extends JFrame implements ActionListener {
 		GridBagConstraints constraints = new GridBagConstraints();
 
 		JLabel titleLabel = new JLabel("Lindenmeyer");
+		JLabel examplesLabel = new JLabel("Examples");
 		JLabel startLabel = new JLabel("Start");
 		JLabel rulesLabel = new JLabel("Rules");
 		JLabel iterationsLabel = new JLabel("Iterations");
 		JLabel angleLabel = new JLabel("Angle");
 		JLabel lineLabel = new JLabel("Line length");
 
-		startTextField = new JTextField("F");
+		examplesBox = new JComboBox<String>(examples);
+		startTextField = new JTextField();
 		// Number of rows overridden by the layout.
 		rulesTextArea = new JTextArea(4, 10);
-		rulesTextArea.setText("F : F+F-F-F+F");
-		iterationsTextField = new JTextField("3");
-		angleTextField = new JTextField("90");
-		lineTextField = new JTextField("8");
+		iterationsTextField = new JTextField();
+		angleTextField = new JTextField();
+		lineTextField = new JTextField();
 		JButton drawButton = new JButton("Draw");
+
+		examplesBox.addActionListener(this);
+		examplesBox.setSelectedIndex(0);
 
 		constraints.gridx = 0;
 		constraints.insets = new Insets(2, 2, 2, 2);
@@ -97,61 +106,75 @@ public class Frame extends JFrame implements ActionListener {
 		constraints.gridy = 2;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
-		menuPanel.add(startLabel, constraints);
+		menuPanel.add(examplesLabel, constraints);
 
 		constraints.gridy = 3;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		menuPanel.add(startTextField, constraints);
+		// examplesList.setVisibleRowCount(1);
+		menuPanel.add(new JScrollPane(examplesBox), constraints);
 
 		constraints.gridy = 4;
+		menuPanel.add(new JSeparator(), constraints);
+
+		constraints.gridy = 5;
+		constraints.gridwidth = 1;
+		constraints.fill = GridBagConstraints.NONE;
+		menuPanel.add(startLabel, constraints);
+
+		constraints.gridy = 6;
+		constraints.gridwidth = 2;
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+		menuPanel.add(startTextField, constraints);
+
+		constraints.gridy = 7;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
 		menuPanel.add(rulesLabel, constraints);
 
-		constraints.gridy = 5;
+		constraints.gridy = 8;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		rulesTextArea.setLineWrap(true);
 		menuPanel.add(new JScrollPane(rulesTextArea), constraints);
 
-		constraints.gridy = 6;
+		constraints.gridy = 9;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
 		menuPanel.add(iterationsLabel, constraints);
 
-		constraints.gridy = 7;
+		constraints.gridy = 10;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		menuPanel.add(iterationsTextField, constraints);
 
-		constraints.gridy = 8;
+		constraints.gridy = 11;
 		menuPanel.add(new JSeparator(), constraints);
 
-		constraints.gridy = 9;
+		constraints.gridy = 12;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
 		menuPanel.add(angleLabel, constraints);
 
-		constraints.gridy = 10;
+		constraints.gridy = 13;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		menuPanel.add(angleTextField, constraints);
 
-		constraints.gridy = 11;
+		constraints.gridy = 14;
 		constraints.gridwidth = 1;
 		constraints.fill = GridBagConstraints.NONE;
 		menuPanel.add(lineLabel, constraints);
 
-		constraints.gridy = 12;
+		constraints.gridy = 15;
 		constraints.gridwidth = 2;
 		constraints.fill = GridBagConstraints.HORIZONTAL;
 		menuPanel.add(lineTextField, constraints);
 
-		constraints.gridy = 13;
+		constraints.gridy = 16;
 		menuPanel.add(new JSeparator(), constraints);
 
-		constraints.gridy = 14;
+		constraints.gridy = 17;
 		drawButton.addActionListener(this);
 		menuPanel.add(drawButton, constraints);
 
@@ -164,21 +187,60 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		try {
-			String start = startTextField.getText()
-					.replaceAll("\\s","");
-			String rules[] = rulesTextArea.getText().split("\\n");
-			int iterations = Integer.parseInt(iterationsTextField.getText());
-			int angle = Integer.parseInt(angleTextField.getText());
-			int lineLength = Integer.parseInt(lineTextField.getText());
+	public void actionPerformed(ActionEvent event) {
+		if (event.getActionCommand() == "comboBoxChanged") {
+			JComboBox<String> examplesBox = (JComboBox<String>) event
+					.getSource();
+			String example = (String) examplesBox.getSelectedItem();
 
-			Lindenmayer.calculateLSystem(start, rules, iterations, angle,
-					lineLength);
-		} catch (NumberFormatException exception) {
-			JOptionPane.showMessageDialog(canvasPanel,
-					"Please review input parameters.", "Error",
-					JOptionPane.ERROR_MESSAGE);
+			// Switch case with Strings. Thanks JDK 7!.
+			switch (example) {
+			case "Koch Curve":
+				startTextField.setText("F");
+				rulesTextArea.setText("F:F+F-F-F+F");
+				iterationsTextField.setText("5");
+				angleTextField.setText("90");
+				lineTextField.setText("3");
+				break;
+			case "Sierpinski Triangle":
+				startTextField.setText("F");
+				rulesTextArea.setText("F:G-F-G\nG:F+G+F");
+				iterationsTextField.setText("8");
+				angleTextField.setText("60");
+				lineTextField.setText("2");
+				break;
+			case "Dragon Curve":
+				startTextField.setText("FX");
+				rulesTextArea.setText("X:X+YF\nY:FX-Y");
+				iterationsTextField.setText("12");
+				angleTextField.setText("90");
+				lineTextField.setText("3");
+				break;
+			case "Fractal Plant":
+				startTextField.setText("X");
+				rulesTextArea.setText("X:F-[[X]+X]+F[+FX]-X\nF:FF");
+				iterationsTextField.setText("");
+				angleTextField.setText("25");
+				lineTextField.setText("");
+				break;
+			}
+
+		} else {
+			try {
+				String start = startTextField.getText().replaceAll("\\s", "");
+				String rules[] = rulesTextArea.getText().split("\\n");
+				int iterations = Integer
+						.parseInt(iterationsTextField.getText());
+				int angle = Integer.parseInt(angleTextField.getText());
+				int lineLength = Integer.parseInt(lineTextField.getText());
+
+				Lindenmayer.calculateLSystem(start, rules, iterations, angle,
+						lineLength);
+			} catch (NumberFormatException exception) {
+				JOptionPane.showMessageDialog(canvasPanel,
+						"Please review input parameters.", "Error",
+						JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 }

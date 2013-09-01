@@ -20,15 +20,20 @@ public class Canvas extends JPanel {
 
 	public void draw() {
 		Graphics2D graphics2D = (Graphics2D) getGraphics();
-		graphics2D.setColor(Color.blue);
 
+		graphics2D.setColor(Color.blue);
 		for (Line2D line : lines)
 			graphics2D.drawLine((int) line.getX1(), (int) line.getY1(),
 					(int) line.getX2(), (int) line.getY2());
 	}
-	
+
 	public void clear() {
-		lines = new ArrayList<Line2D>();
+		Graphics2D graphics2D = (Graphics2D) getGraphics();
+		lines.clear();
+
+		graphics2D.setColor(Color.white);
+		graphics2D.clearRect(1, 1, getWidth() - 2, getHeight() - 2);
+		graphics2D.fillRect(2, 2, getWidth() - 3, getHeight() - 3);
 	}
 
 	@Override
