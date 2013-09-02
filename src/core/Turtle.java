@@ -20,8 +20,6 @@ public class Turtle {
 	private static final int V_ANGLE = 180;
 	/** Horizontal starting angle. */
 	private static final int H_ANGLE = 90;
-	/** Factor to convert degrees to radians. */
-	private static final double TO_RADIANS = Math.PI / 180;
 
 	/** Current turtle state. */
 	private TurtleState currentState;
@@ -114,12 +112,12 @@ public class Turtle {
 
 					for (char item : state.toCharArray()) {
 						if (item == 'F' || item == 'G') {
-							double nextX = currentState.x
-									+ (lineLength * Math.sin(currentState.angle
-											* TO_RADIANS));
-							double nextY = currentState.y
-									+ (lineLength * Math.cos(currentState.angle
-											* TO_RADIANS));
+							double nextX = currentState.x + (lineLength *
+									Math.sin(Math.toRadians(
+											currentState.angle)));
+							double nextY = currentState.y + (lineLength *
+									Math.cos(Math.toRadians(
+											currentState.angle)));
 							canvas.addLine(new Line2D.Double(currentState.x,
 									currentState.y, nextX, nextY));
 							currentState = new TurtleState(nextX, nextY,
@@ -137,7 +135,8 @@ public class Turtle {
 						} else if (item == '[') {
 							stack.push(currentState);
 						} else if (item == ']') {
-							currentState = stack.pop();
+							if (!stack.isEmpty())
+								currentState = stack.pop();
 						}
 
 						canvas.draw();

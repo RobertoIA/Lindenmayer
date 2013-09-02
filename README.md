@@ -8,3 +8,6 @@ Includes examples of fractal plants, koch curves, sierpinski triangles and more.
 
 ![](http://i.minus.com/iVXDbBlXBVx6B.gif)
 ![](http://i.minus.com/ibxukzAzfzw6Qm.gif)
+
+###Credits
+Some of the examples taken from [10K L-Systems Blog](http://10klsystems.wordpress.com/examples/)

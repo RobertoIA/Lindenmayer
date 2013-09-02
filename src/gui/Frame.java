@@ -62,8 +62,10 @@ public class Frame extends JFrame implements ActionListener {
 	private JCheckBox verticalCheckBox;
 
 	/** Examples list. */
-	private String[] examples = { "Simple Tree", "Koch Curve",
-			"Sierpinski Triangle", "Dragon Curve", "Fractal Plant" };
+	private String[] examples = { "Simple Tree", "Koch Curve I",
+			"Koch Curve II", "Hilbert Curve", "Sierpinski Triangle", "Cube",
+			"Crystal", "Hexagonal Gosper", "Rings", "Dragon Curve", "Seaweed",
+			"Fractal Plant", "Penrose Tiling" };
 
 	/**
 	 * Constructor.
@@ -273,13 +275,59 @@ public class Frame extends JFrame implements ActionListener {
 				bottomButton.setSelected(true);
 				verticalCheckBox.setSelected(true);
 				break;
-			case "Koch Curve":
+			case "Koch Curve I":
 				startTextField.setText("F");
 				rulesTextArea.setText("F:F+F-F-F+F");
 				iterationsTextField.setText("6");
 				angleTextField.setText("90");
 				lineTextField.setText("2");
 				cornerButton.setSelected(true);
+				verticalCheckBox.setSelected(false);
+				break;
+			case "Koch Curve II":
+				startTextField.setText("F+F+F+F");
+				rulesTextArea.setText("F:F+F-F-FF+F+F-F");
+				iterationsTextField.setText("3");
+				angleTextField.setText("90");
+				lineTextField.setText("2");
+				centerButton.setSelected(true);
+				verticalCheckBox.setSelected(true);
+				break;
+			case "Hilbert Curve":
+				startTextField.setText("X");
+				rulesTextArea.setText("X:+YF-XFX-FY+\nY:-XF+YFY+FX-\nF:F");
+				iterationsTextField.setText("7");
+				angleTextField.setText("90");
+				lineTextField.setText("2");
+				centerButton.setSelected(true);
+				verticalCheckBox.setSelected(true);
+				break;
+			case "Cube":
+				startTextField.setText("F+F+F+F");
+				rulesTextArea.setText("F:FF+F+F+F+FF");
+				iterationsTextField.setText("4");
+				angleTextField.setText("90");
+				lineTextField.setText("4");
+				cornerButton.setSelected(true);
+				verticalCheckBox.setSelected(false);
+				break;
+			case "Crystal":
+				startTextField.setText("F+F+F+F");
+				rulesTextArea.setText("F:FF+F++F+F");
+				iterationsTextField.setText("4");
+				angleTextField.setText("90");
+				lineTextField.setText("4");
+				cornerButton.setSelected(true);
+				verticalCheckBox.setSelected(false);
+				break;
+			case "Hexagonal Gosper":
+				startTextField.setText("XF");
+				rulesTextArea.setText("X:X+YF++YF-FX--FXFX-YF+"
+						+ "\nY:-FX+YFYF++YF+FX--FX-Y\nF:F");
+				iterationsTextField.setText("4");
+				angleTextField.setText("60");
+				lineTextField.setText("4");
+				bottomButton.setSelected(true);
 				verticalCheckBox.setSelected(false);
 				break;
 			case "Sierpinski Triangle":
@@ -291,6 +339,15 @@ public class Frame extends JFrame implements ActionListener {
 				cornerButton.setSelected(true);
 				verticalCheckBox.setSelected(false);
 				break;
+			case "Rings":
+				startTextField.setText("F+F+F+F");
+				rulesTextArea.setText("F:FF+F+F+F+F+F-F");
+				iterationsTextField.setText("4");
+				angleTextField.setText("90");
+				lineTextField.setText("2");
+				centerButton.setSelected(true);
+				verticalCheckBox.setSelected(true);
+				break;
 			case "Dragon Curve":
 				startTextField.setText("FX");
 				rulesTextArea.setText("X:X+YF\nY:FX-Y");
@@ -298,7 +355,15 @@ public class Frame extends JFrame implements ActionListener {
 				angleTextField.setText("90");
 				lineTextField.setText("3");
 				centerButton.setSelected(true);
-				verticalCheckBox.setSelected(false);
+				verticalCheckBox.setSelected(true);
+				break;
+			case "Seaweed":
+				startTextField.setText("F");
+				rulesTextArea.setText("F:FF-[-F+F+F]+[+F-F-F]");
+				iterationsTextField.setText("4");
+				angleTextField.setText("11");
+				lineTextField.setText("8");
+				bottomButton.setSelected(true);
 				verticalCheckBox.setSelected(true);
 				break;
 			case "Fractal Plant":
@@ -308,6 +373,17 @@ public class Frame extends JFrame implements ActionListener {
 				angleTextField.setText("25");
 				lineTextField.setText("3");
 				bottomButton.setSelected(true);
+				verticalCheckBox.setSelected(true);
+				break;
+			case "Penrose Tiling":
+				startTextField.setText("[N]++[N]++[N]++[N]++[N]");
+				rulesTextArea.setText("M=OF++PF----NF[-OF----MF]++"
+						+ "\nN=+OF--PF[---MF--NF]+" + "\nO=-MF++NF[+++OF++PF]-"
+						+ "\nP=--OF++++MF[+PF++++NF]--NF\nF=");
+				iterationsTextField.setText("6");
+				angleTextField.setText("36");
+				lineTextField.setText("8");
+				centerButton.setSelected(true);
 				verticalCheckBox.setSelected(true);
 				break;
 			default:

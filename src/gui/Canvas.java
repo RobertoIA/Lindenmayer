@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 public class Canvas extends JPanel {
 
 	/** List of lines to draw onto the canvas. */
-	private List<Line2D> lines;
+	private List<Line2D.Double> lines;
 
 	/**
 	 * Adds a line to the canvas.
@@ -27,7 +27,7 @@ public class Canvas extends JPanel {
 	 * @param line
 	 *            Line to add to the canvas.
 	 */
-	public final void addLine(final Line2D line) {
+	public final void addLine(final Line2D.Double line) {
 		lines.add(line);
 	}
 
@@ -38,9 +38,9 @@ public class Canvas extends JPanel {
 		Graphics2D graphics2D = (Graphics2D) getGraphics();
 
 		graphics2D.setColor(Color.blue);
-		for (Line2D line : lines)
-			graphics2D.drawLine((int) line.getX1(), (int) line.getY1(),
-					(int) line.getX2(), (int) line.getY2());
+		for (Line2D.Double line : lines)
+			graphics2D.drawLine((int) Math.round(line.getX1()), (int) Math.round(line.getY1()),
+					(int) Math.round(line.getX2()), (int) Math.round(line.getY2()));
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class Canvas extends JPanel {
 	public final void paintComponent(final Graphics graphics) {
 		super.paintComponent(graphics);
 
-		lines = new ArrayList<Line2D>();
+		lines = new ArrayList<Line2D.Double>();
 		draw();
 	}
 }
